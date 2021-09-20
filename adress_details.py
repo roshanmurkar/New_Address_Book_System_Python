@@ -1,88 +1,49 @@
 from contact import Contact
-import logging
 
-logging.basicConfig(filename="address_book_system.log", filemode="w")
-log = logging.getLogger()
-
-class EmptyData(Exception):...
-    #Raise when any field is empty
-class InvalidLength(Exception):...
-    #Raise when mobile number is less than 10 digit or zip code less than 6
-class InvalidNumericData(Exception):...
-    #Raise when zip code is wrong
 
 class ContactDetails:
-    @staticmethod
-    def create_contact():
-        """
-        taking data from user
-        :return: contact dictionary as a object
-        """
-        try:
-            first_name = input("Enter first name :-\t")
-            if len(first_name) == 0:
-                raise EmptyData
-            last_name = input("Enter last name :-\t")
-            if len(last_name) == 0:
-                raise EmptyData
-            address = input("Enter address :-\t")
-            if len(address) == 0:
-                raise EmptyData
-            city = input("Enter city :-\t")
-            if len(city) == 0:
-                raise EmptyData
-            state = input("Enter state :-\t")
-            if len(state) == 0:
-                raise EmptyData
-            zip = input("Enter zip code :-\t")
-            if not zip.isnumeric():
-                raise InvalidNumericData
-            elif len(zip) < 6:
-                raise InvalidLength
-            phone_number = input("Enter phone number :-\t")
-            if len(phone_number) < 10:
-                raise InvalidLength
-            elif not phone_number.isnumeric():
-                raise InvalidNumericData
-            email = input("Enter email address :-\t")
-            if len(email) == 0:
-                raise EmptyData
+    contact_list = []
 
-        except EmptyData:
-            print("Empty field not allowed")
-            log.error("Empty field not allowed")
-            return None
-        except InvalidLength:
-            print("Entered data length is small !!!!")
-            log.error("Entered data length is small !!!!")
-            return None
-        except InvalidNumericData:
-            print("This Data should be in numeric")
-            log.error("This Data should be in numeric")
-            return None
-        except Exception:
-            print("")
-        #finally:
-        #    print("Data is entered successfully")
+    def add_contact(self):
+        contact = Contact.create_contact()
+        self.contact_list.append(contact)
 
-        contact_dict = {
-            "first_name": first_name,
-            "last_name": last_name,
-            "address": address,
-            "city": city,
-            "state": state,
-            "zip": zip,
-            "number": phone_number,
-            "email": email
-        }
-        contact = Contact(contact_dict)
-        return contact
+    def display_contact(self):
+        contacts = "".join(str(contact) for contact in self.contact_list)
+        print(contacts)
 
-    @staticmethod
-    def display_contact(contact):
-        """
-        for printing the contact
-        :param contact: passing contact object
-        :return: str method that contain details of user contact
-        """
-        print(contact)
+    def edit_contact(self):
+        edit_data = input("Enter the first name of user you want to edit\n")
+        for contact in self.contact_list:
+            if contact.first_name == edit_data:
+                choice = int(input(
+                    "Enter the number that you want to edit field in details"
+                    " \n 1. First Name 2. Last name 3. Address 4. city 5. state 6.zip 7. Phone number 8.Email\n"))
+                if choice == 1:
+                    first_name = input("Enter new first name\n")
+                    contact.first_name = first_name
+                elif choice == 2:
+                    last_name = input("Enter new last name\n")
+                    contact.last_name = last_name
+                elif choice == 3:
+                    address = input("Enter new address\n")
+                    contact.address = address
+                elif choice == 4:
+                    city = input("Enter new city\n")
+                    contact.city = city
+                elif choice == 5:
+                    state = input("Enter new state\n")
+                    contact.state = state
+                elif choice == 6:
+                    zip = input("Enter new zip\n")
+                    contact.zip = zip
+                elif choice == 7:
+                    phone_number = input("Enter new phone number\n")
+                    contact.phone_number = phone_number
+                elif choice == 8:
+                    email = input("Enter new email\n")
+                    contact.email = email
+                else:
+                    print("Please enter a valid input")
+            else:
+                print("Please enter a valid name")
