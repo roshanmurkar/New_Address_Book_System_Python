@@ -1,6 +1,8 @@
 import logging
 
+logging.basicConfig(filename="address_book_system.log", filemode="w")
 log = logging.getLogger()
+
 class EmptyData(Exception):...
     #Raise when any field is empty
 class InvalidLength(Exception):...
@@ -20,7 +22,7 @@ class Contact:
         self.city = contact.get("city")
         self.state = contact.get("state")
         self.zip = contact.get("zip")
-        self.phone_number = contact.get("number")
+        self.phone_number = contact.get("phone_number")
         self.email = contact.get("email")
 
     def __str__(self) -> str:
