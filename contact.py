@@ -1,5 +1,6 @@
+import logging
 
-
+log = logging.getLogger()
 class EmptyData(Exception):...
     #Raise when any field is empty
 class InvalidLength(Exception):...
@@ -35,14 +36,39 @@ class Contact:
 
     @staticmethod
     def create_contact():
-        first_name = input("Enter first name:\t")
-        last_name = input("Enter last name:\t")
-        address = input("Enter address:\t")
-        city = input("Enter city:\t")
-        state = input("Enter state:\t")
-        zip = input("Enter zip code:\t")
-        phone_number = input("Enter phone number:\t")
-        email = input("Enter email id:\t")
+        try:
+
+            first_name = input("Enter first name:\t")
+            last_name = input("Enter last name:\t")
+            address = input("Enter address:\t")
+            city = input("Enter city:\t")
+            state = input("Enter state:\t")
+            zip = input("Enter zip code:\t")
+            phone_number = input("Enter phone number:\t")
+            email = input("Enter email id:\t")
+
+            if len(first_name) == 0 or \
+                    len(last_name) == 0 or \
+                    len(address) == 0 or \
+                    len(city) == 0 or \
+                    len(state) == 0 or \
+                    len(email) == 0:
+                raise EmptyData
+            elif not zip.isnumeric() or not phone_number.isnumeric():
+                raise InvalidNumericData
+            elif len(zip) < 6 or len(phone_number) < 10:
+                raise InvalidLength
+
+        except EmptyData:
+            log.warning("Data is empty")
+            return None
+        except InvalidNumericData:
+            log.warning("Data is not numeric")
+            return None
+        except InvalidLength:
+            log.warning("length of data is small")
+            return None
+
         contact_dict = {
             "first_name": first_name,
             "last_name": last_name,
