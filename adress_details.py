@@ -1,8 +1,16 @@
 from contact import Contact
-
+import json
+import csv
+import pandas as pd
 
 class ContactDetails:
-    contact_list = []
+
+
+    def __init__(self):
+        self.contact_list = []
+        self.address_dictionary = {}
+        #self.json_file = "address_book.json"
+        self.csv_file = "address_book.csv"
 
     def add_contact(self):
         """
@@ -12,6 +20,31 @@ class ContactDetails:
         contact = Contact.create_contact()
         self.contact_list.append(contact)
 
+        df = pd.read_csv('address_book.csv')
+        #print(df)
+        adf = pd.DataFrame({'FIRST NAME': [contact.first_name],
+                        'LAST NAME': [contact.last_name],
+                        'ADDRESS': [contact.address],
+                        'CITY': [contact.city],
+                        'STATE': [contact.state],
+                        'ZIP CODE': [contact.zip],
+                        'PHONE NUMBER': [contact.phone_number],
+                        'EMAIL': [contact.email]})
+        adf.to_csv('address_book.csv',mode='a', header=False, index=None)
+        #storing all contacts in address_book.csv file
+        """with open("address_book.csv", "w") as f:
+            for contact in self.contact_list:
+                f.write(f"FIRST NAME -> {contact.first_name}\n"
+                        f"LAST NAME -> {contact.last_name}\n"
+                        f"ADDRESS -> {contact.address}\n"
+                        f"CITY -> {contact.city}\n"
+                        f"STATE -> {contact.state}\n"
+                        f"ZIP CODE -> {contact.zip}\n"
+                        f"PHONE NUMBER -> {contact.phone_number}\n"
+                        f"EMAIL -> {contact.email}\n\n")"""
+
+
+
     def display_contact(self):
         """
         this function for display all the contacts that are present in contact_list
@@ -19,6 +52,7 @@ class ContactDetails:
         """
         contacts = "".join(str(contact) for contact in self.contact_list)
         print(contacts)
+
 
     def delete_contact(self):
         """
@@ -74,3 +108,4 @@ class ContactDetails:
                     print("Please enter a valid input")
             else:
                 print("Please enter a valid name")
+
