@@ -1,5 +1,5 @@
 import logging
-
+import re
 logging.basicConfig(filename="address_book_system.log", filemode="w")
 log = logging.getLogger()
 
@@ -9,6 +9,10 @@ class InvalidLength(Exception):...
     #Raise when mobile number is less than 10 digit or zip code less than 6
 class InvalidNumericData(Exception):...
     #Raise when zip code or mobile number  is wrong
+class ValidationError(Exception):
+    #Raise when regex pattern is not match
+    def __init__(self,message):
+        self.message = message
 
 class Contact:
     def __init__(self, contact):
@@ -38,38 +42,78 @@ class Contact:
 
     @staticmethod
     def create_contact():
+        first_name = input("Enter first name:\t")
         try:
+            if re.fullmatch('^[A-Za-z]{2,}$',first_name):
+                first_name = first_name
+            else:
+                raise ValidationError("First Name is not valid")
+        except ValidationError as e:
+            print(e.message)
 
-            first_name = input("Enter first name:\t")
-            last_name = input("Enter last name:\t")
-            address = input("Enter address:\t")
-            city = input("Enter city:\t")
-            state = input("Enter state:\t")
-            zip = input("Enter zip code:\t")
-            phone_number = input("Enter phone number:\t")
-            email = input("Enter email id:\t")
+        last_name = input("Enter last name:\t")
+        try:
+            if re.fullmatch('^[A-Za-z]{2,}$',last_name):
+                last_name = last_name
+            else:
+                raise ValidationError("First Name is not valid")
+        except ValidationError as e:
+            print(e.message)
 
-            if len(first_name) == 0 or \
-                    len(last_name) == 0 or \
-                    len(address) == 0 or \
-                    len(city) == 0 or \
-                    len(state) == 0 or \
-                    len(email) == 0:
-                raise EmptyData
-            elif not zip.isnumeric() or not phone_number.isnumeric():
-                raise InvalidNumericData
-            elif len(zip) < 6 or len(phone_number) < 10:
-                raise InvalidLength
+        address = input("Enter address:\t")
+        try:
+            if re.fullmatch('^[A-Za-z ]{2,}$',address):
+                address = address
+            else:
+                raise ValidationError("Address is not valid")
+        except ValidationError as e:
+            print(e.message)
 
-        except EmptyData:
-            log.warning("Data is empty")
-            return None
-        except InvalidNumericData:
-            log.warning("Data is not numeric")
-            return None
-        except InvalidLength:
-            log.warning("length of data is small")
-            return None
+        city = input("Enter city:\t")
+        try:
+            if re.fullmatch('^[A-Za-z]{2,}$',city):
+                city = city
+            else:
+                raise ValidationError("City is not valid")
+        except ValidationError as e:
+            print(e.message)
+
+        state = input("Enter state:\t")
+        try:
+            if re.fullmatch('^[A-Za-z]{2,}$',state):
+                state = state
+            else:
+                raise ValidationError("State is not valid")
+        except ValidationError as e:
+            print(e.message)
+
+        zip = input("Enter zip code:\t")
+        try:
+            if re.fullmatch('^[0-9]{6,}$',zip):
+                zip = zip
+            else:
+                raise ValidationError("Zip code is not valid")
+        except ValidationError as e:
+            print(e.message)
+
+        phone_number = input("Enter phone number:\t")
+        try:
+            if re.fullmatch('^[0-9]{10,}$',phone_number):
+                phone_number = phone_number
+            else:
+                raise ValidationError("Phone number is not valid")
+        except ValidationError as e:
+            print(e.message)
+
+        email = input("Enter email id:\t")
+        try:
+            if re.fullmatch('[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+',email):
+                email = email
+            else:
+                raise ValidationError("Email is not valid")
+        except ValidationError as e:
+            print(e.message)
+
 
         contact_dict = {
             "first_name": first_name,
